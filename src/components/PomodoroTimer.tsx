@@ -4,7 +4,7 @@ import { formatTime } from '../utils/formatTime';
 
 // Tempos em segundos
 const TIMER_MODES = {
-  focus: 25 * 60,      // 25 minutos
+  focus: 45 * 60,      // 25 minutos
   shortBreak: 5 * 60,  // 5 minutos
   longBreak: 15 * 60,  // 15 minutos
 };
