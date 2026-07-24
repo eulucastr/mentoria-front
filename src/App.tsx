@@ -1,13 +1,11 @@
-import './App.css'
-import { PomodoroTimer } from './components/PomodoroTimer'
+import { Timer } from '@/components/Timer';
 
 function App() {
-
   return (
     <>
-      <PomodoroTimer/>
+      <Timer />
     </>
-  )
+  );
 }
 
-export default App
+export { App };
