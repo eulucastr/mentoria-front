@@ -1,5 +1,5 @@
 import type { CSSProperties } from 'react';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Play, Pause, RotateCcw } from 'lucide-react';
 import { formatTime } from '../utils/formatTime';
 import { Button } from './shadcn/button';
@@ -12,7 +12,7 @@ const TIMER_SETTINGS = {
   longBreak: 0.1,
   cicles: 4,
   autoStartFocus: true,
-  autoStartBreaks: true,
+  autoStartBreaks: false,
 };
 
 type Mode = 'focus' | 'shortBreak' | 'longBreak';
@@ -20,15 +20,12 @@ type Mode = 'focus' | 'shortBreak' | 'longBreak';
 export function Timer() {
   const [mode, setMode] = useState<Mode>('focus');
   const [cicleCount, setCicleCount] = useState<number>(1);
+  const pendingAutoStartRef = useRef<boolean | null>(null);
   const { totalSeconds, pause, resume, restart, isRunning } = useTimer({
     expiryTimestamp: getExpiryTimestamp(TIMER_SETTINGS[mode]),
     onExpire: () => { handleExpire() },
     autoStart: false,
   });
-
-  useEffect(() => {
-    console.log('Timer is running:', isRunning);
-  }, [isRunning])
 
   const toggleTimer = () => {
     if (isRunning) pause(); 
@@ -43,23 +40,37 @@ export function Timer() {
   const elapsedProgress = 100 - cycleProgress;
   
   const handleExpire = () => {
-    let newMode: Mode | undefined;
+    let newMode: Mode;
+    let shouldAutoStart: boolean;
 
     if (mode === 'focus') {
       newMode = cicleCount === TIMER_SETTINGS.cicles ? 'longBreak' : 'shortBreak';
+      shouldAutoStart = TIMER_SETTINGS.autoStartBreaks;
     } else if (mode === 'longBreak') {
-      // newMode = 'focus'
-      // setCicleCount(1)
-    } else if (mode === 'shortBreak') {
-      newMode = 'focus'
-      setCicleCount((prevCount) => prevCount + 1)
+      newMode = 'focus';
+      shouldAutoStart = TIMER_SETTINGS.autoStartFocus;
+      setCicleCount(1);
+    } else {
+      newMode = 'focus';
+      shouldAutoStart = TIMER_SETTINGS.autoStartFocus;
+      setCicleCount((prevCount) => prevCount + 1);
     }
 
-    if (!newMode) return;
-    restart(getExpiryTimestamp(TIMER_SETTINGS[newMode]), true);
+    pendingAutoStartRef.current = shouldAutoStart;
+    setMode(newMode);
   }
 
+  useEffect(() => {
+    if (pendingAutoStartRef.current === null) return;
+
+    const shouldAutoStart = pendingAutoStartRef.current;
+    pendingAutoStartRef.current = null;
+
+    restart(getExpiryTimestamp(TIMER_SETTINGS[mode]), shouldAutoStart);
+  }, [mode, restart]);
+
   const resetTimer = () => {
+    pendingAutoStartRef.current = null;
     setMode('focus')
     setCicleCount(1)
     restart(getExpiryTimestamp(TIMER_SETTINGS['focus']), false)
