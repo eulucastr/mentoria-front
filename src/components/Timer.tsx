@@ -7,12 +7,12 @@ import { useTimer } from 'react-timer-hook';
 import { getExpiryTimestamp } from '@/utils/getExpiryTimestamp';
 
 const TIMER_SETTINGS = {
-  focus: 30,
-  shortBreak: 5,
-  longBreak: 15,
+  focus: 0.1,
+  shortBreak: 0.1,
+  longBreak: 0.1,
   cicles: 4,
-  autoStartFocus: false,
-  autoStartBreaks: false,
+  autoStartFocus: true,
+  autoStartBreaks: true,
 };
 
 type Mode = 'focus' | 'shortBreak' | 'longBreak';
@@ -22,9 +22,13 @@ export function Timer() {
   const [cicleCount, setCicleCount] = useState<number>(1);
   const { totalSeconds, pause, resume, restart, isRunning } = useTimer({
     expiryTimestamp: getExpiryTimestamp(TIMER_SETTINGS[mode]),
+    onExpire: () => { handleExpire() },
     autoStart: false,
-    onExpire: () => { handleExpire() }
   });
+
+  useEffect(() => {
+    console.log('Timer is running:', isRunning);
+  }, [isRunning])
 
   const toggleTimer = () => {
     if (isRunning) pause(); 
@@ -52,8 +56,7 @@ export function Timer() {
     }
 
     if (!newMode) return;
-    restart(getExpiryTimestamp(TIMER_SETTINGS[newMode]), false)
-    setMode(newMode)
+    restart(getExpiryTimestamp(TIMER_SETTINGS[newMode]), true);
   }
 
   const resetTimer = () => {
@@ -61,19 +64,16 @@ export function Timer() {
     setCicleCount(1)
     restart(getExpiryTimestamp(TIMER_SETTINGS['focus']), false)
   }
-
-  useEffect(() => {
-    console.log('Mode changed to:', mode);
-    console.log('Cicle count:', cicleCount);
-  }, [mode, cicleCount]);
   
-
   return (
     <div
-      className={`flex flex-col items-center justify-center gap-6 transition-all duration-300 p-8 ${mode === 'focus' ? 'bg-zinc-800' : 'bg-sky-950'} text-white rounded-2xl shadow-2xl max-w-md mx-auto border border-slate-800`}
+      className={`flex flex-col w-screen h-screen items-center justify-center gap-8 transition-all duration-300 p-8 ${mode === 'focus' ? 'bg-zinc-800' : ' bg-sky-950'} text-white`}
     >
+      <div className="text-2xl font-normal tracking-wide drop-shadow-md">
+        {mode === 'focus' ? 'Foco' : 'Pausa'}
+      </div>
       {/* Display do Tempo */}
-      <div className="text-7xl font-mono font-bold tracking-tighter drop-shadow-md">
+      <div className="text-7xl font-normal tracking-wide">
 		    {formatTime(totalSeconds)}
       </div>
 
@@ -92,7 +92,7 @@ export function Timer() {
                 ? ({ '--cycle-progress': `${cycleBarProgress}%` } as CSSProperties)
                 : undefined
             }
-            className={`${isActiveCycle ? 'w-8' : 'w-3'} h-3 transition-all ease-in-out duration-300 rounded-full ${index + 1 < cicleCount || (isActiveCycle && mode !== 'focus') ? 'bg-sky-500' : 'bg-gray-700'} ${isActiveCycle ? "relative overflow-hidden before:absolute before:inset-y-0 before:left-0 before:rounded-[inherit] before:bg-sky-500 before:content-[''] before:w-(--cycle-progress) before:transition-[width] before:duration-200 before:ease-linear" : ''}`}
+            className={`${isActiveCycle && !(cicleCount === 1 && !isRunning) && mode === 'focus' ? 'w-8' : 'w-3'} h-3 transition-all ease-in-out duration-300 rounded-full ${index + 1 < cicleCount || (isActiveCycle && mode !== 'focus') ? 'bg-sky-500' : 'bg-gray-700'} ${isActiveCycle ? "relative overflow-hidden before:absolute before:inset-y-0 before:left-0 before:rounded-[inherit] before:bg-sky-500 before:content-[''] before:w-(--cycle-progress) before:transition-[width] before:duration-200 before:ease-linear" : ''}`}
           />
             );
           })()
