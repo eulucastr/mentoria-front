@@ -7,9 +7,9 @@ import { useTimer } from 'react-timer-hook';
 import { getExpiryTimestamp } from '@/utils/getExpiryTimestamp';
 
 const TIMER_SETTINGS = {
-  focus: 0.1,
-  shortBreak: 0.1,
-  longBreak: 0.1,
+  focus: 30,
+  shortBreak: 5,
+  longBreak: 15,
   cicles: 4,
   autoStartFocus: true,
   autoStartBreaks: false,
@@ -27,7 +27,27 @@ export function Timer() {
     autoStart: false,
   });
 
+  const requestNotificationPermission = () => {
+    if (typeof window === 'undefined' || !('Notification' in window)) return;
+    if (Notification.permission !== 'default') return;
+
+    Notification.requestPermission().catch(() => {});
+  };
+
+  const notifyTurnEnd = (finishedMode: Mode, nextMode: Mode) => {
+    if (typeof window === 'undefined' || !('Notification' in window)) return;
+
+    const title = finishedMode === 'focus' ? 'Turno de foco finalizado' : 'Turno de pausa finalizado';
+    const body = nextMode === 'focus' ? 'Hora de voltar ao foco.' : 'Hora de fazer uma pausa.';
+
+    if (Notification.permission === 'granted') {
+      new Notification(title, { body });
+    }
+  };
+
   const toggleTimer = () => {
+    requestNotificationPermission();
+
     if (isRunning) pause(); 
     else resume();
   };
@@ -40,6 +60,7 @@ export function Timer() {
   const elapsedProgress = 100 - cycleProgress;
   
   const handleExpire = () => {
+    const finishedMode = mode;
     let newMode: Mode;
     let shouldAutoStart: boolean;
 
@@ -56,6 +77,7 @@ export function Timer() {
       setCicleCount((prevCount) => prevCount + 1);
     }
 
+    notifyTurnEnd(finishedMode, newMode);
     pendingAutoStartRef.current = shouldAutoStart;
     setMode(newMode);
   }
