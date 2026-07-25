@@ -11,7 +11,7 @@ const TIMER_SETTINGS = {
   shortBreak: 5,
   longBreak: 15,
   cicles: 4,
-  autoStartFocus: true,
+  autoStartFocus: false,
   autoStartBreaks: false,
 };
 
