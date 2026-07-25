@@ -10,7 +10,7 @@ const TIMER_SETTINGS = {
   focus: 30,
   shortBreak: 5,
   longBreak: 15,
-  cicles: 4,
+  cycles: 4,
   autoStartFocus: false,
   autoStartBreaks: false,
 };
@@ -19,7 +19,7 @@ type Mode = 'focus' | 'shortBreak' | 'longBreak';
 
 export function Timer() {
   const [mode, setMode] = useState<Mode>('focus');
-  const [cicleCount, setCicleCount] = useState<number>(1);
+  const [cycleCount, setCycleCount] = useState<number>(1);
   const pendingAutoStartRef = useRef<boolean | null>(null);
   const { totalSeconds, pause, resume, restart, isRunning } = useTimer({
     expiryTimestamp: getExpiryTimestamp(TIMER_SETTINGS[mode]),
@@ -35,6 +35,8 @@ export function Timer() {
   };
 
   const notifyTurnEnd = (finishedMode: Mode, nextMode: Mode) => {
+    playAlertSound();
+
     if (typeof window === 'undefined' || !('Notification' in window)) return;
 
     const title = finishedMode === 'focus' ? 'Turno de foco finalizado' : 'Turno de pausa finalizado';
@@ -45,19 +47,17 @@ export function Timer() {
     }
   };
 
+  const playAlertSound = () => {
+    const audio = new Audio('/sounds/bell.mp3'); 
+    audio.play().catch(() => {});
+  };
+
   const toggleTimer = () => {
     requestNotificationPermission();
 
     if (isRunning) pause(); 
     else resume();
   };
-
-  const currentCycleDuration = TIMER_SETTINGS[mode] * 60;
-  const cycleProgress = Math.max(
-    0,
-    Math.min(100, (totalSeconds / currentCycleDuration) * 100),
-  );
-  const elapsedProgress = 100 - cycleProgress;
   
   const handleExpire = () => {
     const finishedMode = mode;
@@ -65,21 +65,28 @@ export function Timer() {
     let shouldAutoStart: boolean;
 
     if (mode === 'focus') {
-      newMode = cicleCount === TIMER_SETTINGS.cicles ? 'longBreak' : 'shortBreak';
+      newMode = cycleCount === TIMER_SETTINGS.cycles ? 'longBreak' : 'shortBreak';
       shouldAutoStart = TIMER_SETTINGS.autoStartBreaks;
     } else if (mode === 'longBreak') {
       newMode = 'focus';
       shouldAutoStart = TIMER_SETTINGS.autoStartFocus;
-      setCicleCount(1);
+      setCycleCount(1);
     } else {
       newMode = 'focus';
       shouldAutoStart = TIMER_SETTINGS.autoStartFocus;
-      setCicleCount((prevCount) => prevCount + 1);
+      setCycleCount((prevCount) => prevCount + 1);
     }
 
     notifyTurnEnd(finishedMode, newMode);
     pendingAutoStartRef.current = shouldAutoStart;
     setMode(newMode);
+  }
+
+  const resetTimer = () => {
+    pendingAutoStartRef.current = null;
+    setMode('focus')
+    setCycleCount(1)
+    restart(getExpiryTimestamp(TIMER_SETTINGS['focus']), false)
   }
 
   useEffect(() => {
@@ -91,13 +98,19 @@ export function Timer() {
     restart(getExpiryTimestamp(TIMER_SETTINGS[mode]), shouldAutoStart);
   }, [mode, restart]);
 
-  const resetTimer = () => {
-    pendingAutoStartRef.current = null;
-    setMode('focus')
-    setCicleCount(1)
-    restart(getExpiryTimestamp(TIMER_SETTINGS['focus']), false)
-  }
+  useEffect(() => {
+    const modeLabel = mode === 'focus' ? 'Foco' : 'Pausa';
+    document.title = `${formatTime(totalSeconds)} - ${modeLabel} | Mentoria`;
+  }, [totalSeconds, mode]);
   
+  // For current cycle progress calculation
+  const currentCycleDuration = TIMER_SETTINGS[mode] * 60;
+  const cycleProgress = Math.max(
+    0,
+    Math.min(100, (totalSeconds / currentCycleDuration) * 100),
+  );
+  const elapsedProgress = 100 - cycleProgress;
+
   return (
     <div
       className={`flex flex-col w-screen h-screen items-center justify-center gap-8 transition-all duration-300 p-8 ${mode === 'focus' ? 'bg-zinc-800' : ' bg-sky-950'} text-white`}
@@ -112,9 +125,9 @@ export function Timer() {
 
       {/* Indicador de Ciclos */}
       <div className="flex items-center gap-2">
-        {Array.from({ length: TIMER_SETTINGS.cicles }).map((_, index) => (
+        {Array.from({ length: TIMER_SETTINGS.cycles }).map((_, index) => (
           (() => {
-            const isActiveCycle = index + 1 === cicleCount;
+            const isActiveCycle = index + 1 === cycleCount;
             const cycleBarProgress = isActiveCycle && mode === 'focus' ? elapsedProgress : 100;
 
             return (
@@ -125,7 +138,7 @@ export function Timer() {
                 ? ({ '--cycle-progress': `${cycleBarProgress}%` } as CSSProperties)
                 : undefined
             }
-            className={`${isActiveCycle && !(cicleCount === 1 && !isRunning) && mode === 'focus' ? 'w-8' : 'w-3'} h-3 transition-all ease-in-out duration-300 rounded-full ${index + 1 < cicleCount || (isActiveCycle && mode !== 'focus') ? 'bg-sky-500' : 'bg-gray-700'} ${isActiveCycle ? "relative overflow-hidden before:absolute before:inset-y-0 before:left-0 before:rounded-[inherit] before:bg-sky-500 before:content-[''] before:w-(--cycle-progress) before:transition-[width] before:duration-200 before:ease-linear" : ''}`}
+            className={`${isActiveCycle && !(cycleCount === 1 && !isRunning) && mode === 'focus' ? 'w-8' : 'w-3'} h-3 transition-all ease-in-out duration-300 rounded-full ${index + 1 < cycleCount || (isActiveCycle && mode !== 'focus') ? 'bg-sky-500' : 'bg-gray-700'} ${isActiveCycle ? "relative overflow-hidden before:absolute before:inset-y-0 before:left-0 before:rounded-[inherit] before:bg-sky-500 before:content-[''] before:w-(--cycle-progress) before:transition-[width] before:duration-200 before:ease-linear" : ''}`}
           />
             );
           })()
