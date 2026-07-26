@@ -20,6 +20,7 @@ type Mode = 'focus' | 'shortBreak' | 'longBreak';
 export function Timer() {
   const [mode, setMode] = useState<Mode>('focus');
   const [cycleCount, setCycleCount] = useState<number>(1);
+  const [focusHasStarted, setFocusHasStarted] = useState<boolean>(false);
   const pendingAutoStartRef = useRef<boolean | null>(null);
   const { totalSeconds, pause, resume, restart, isRunning } = useTimer({
     expiryTimestamp: getExpiryTimestamp(TIMER_SETTINGS[mode]),
@@ -55,6 +56,12 @@ export function Timer() {
   const toggleTimer = () => {
     requestNotificationPermission();
 
+    if (mode === 'focus' && !focusHasStarted) {
+      setFocusHasStarted(true);
+    } else if (mode !== 'focus' && focusHasStarted) {
+      setFocusHasStarted(false);
+    }
+
     if (isRunning) pause(); 
     else resume();
   };
@@ -65,14 +72,17 @@ export function Timer() {
     let shouldAutoStart: boolean;
 
     if (mode === 'focus') {
+      setFocusHasStarted(false);
       newMode = cycleCount === TIMER_SETTINGS.cycles ? 'longBreak' : 'shortBreak';
       shouldAutoStart = TIMER_SETTINGS.autoStartBreaks;
     } else if (mode === 'longBreak') {
       newMode = 'focus';
+      if (TIMER_SETTINGS.autoStartFocus) setFocusHasStarted(true);
       shouldAutoStart = TIMER_SETTINGS.autoStartFocus;
       setCycleCount(1);
     } else {
       newMode = 'focus';
+      if (TIMER_SETTINGS.autoStartFocus) setFocusHasStarted(true);
       shouldAutoStart = TIMER_SETTINGS.autoStartFocus;
       setCycleCount((prevCount) => prevCount + 1);
     }
@@ -86,6 +96,7 @@ export function Timer() {
     pendingAutoStartRef.current = null;
     setMode('focus')
     setCycleCount(1)
+    setFocusHasStarted(false)
     restart(getExpiryTimestamp(TIMER_SETTINGS['focus']), false)
   }
 
@@ -109,7 +120,7 @@ export function Timer() {
     0,
     Math.min(100, (totalSeconds / currentCycleDuration) * 100),
   );
-  const elapsedProgress = 100 - cycleProgress;
+  const elapsedProgress = cycleProgress ? 100 - cycleProgress : 0;
 
   return (
     <div
@@ -145,7 +156,18 @@ export function Timer() {
                       ? ({ '--cycle-progress': `${cycleBarProgress}%` } as CSSProperties)
                       : undefined
                   }
-                  className={`${isActiveCycle && !(cycleCount === 1 && !isRunning) && mode === 'focus' ? 'w-8' : 'w-3'} h-3 transition-all ease-in-out duration-300 rounded-full ${index + 1 < cycleCount || (isActiveCycle && mode !== 'focus') ? 'bg-sky-500' : mode === 'focus' ? 'bg-gray-700' : 'bg-gray-800'} ${isActiveCycle ? "relative overflow-hidden before:absolute before:inset-y-0 before:left-0 before:rounded-[inherit] before:bg-sky-500 before:content-[''] before:w-(--cycle-progress) before:transition-[width] before:duration-200 before:ease-linear" : ''}`}
+                  className={`
+                    w3 h-3 transition-all ease-in-out duration-300 rounded-full 
+                    ${isActiveCycle && focusHasStarted ? 'w-8' : 'w-3'}
+                    ${mode === 'focus' ? 'bg-sky-200/20' : 'bg-sky-200/30'}
+                    ${index + 1 < cycleCount ? `${mode === 'focus' ? 'bg-sky-500' : 'bg-white'}` : ''}
+                    
+                    
+                    ${mode === 'focus' ? '' : ''}
+                    ${isActiveCycle ? `
+                      before:transition-[width] relative overflow-hidden before:absolute before:inset-y-0 before:left-0 before:content-[''] before:w-(--cycle-progress) before:duration-200 before:ease-linear before:rounded-full
+                      ${mode === 'focus' ? 'before:bg-sky-500' : 'before:bg-white'} 
+                      ` : ''}`}
                 />
               );
             })()
@@ -156,8 +178,13 @@ export function Timer() {
         <div className="flex items-center gap-4">
           <Button
             onClick={toggleTimer}
-            variant={`${mode === 'focus' ? 'default' : 'secondary'}`}
-            className={`w-15 h-15 rounded-full transition-all duration-300 ease-in-out`}
+            variant={`${mode === 'focus' ? 'default' : 'default'}`}
+            className={`
+              w-15 h-15 rounded-full transition-all duration-300 ease-in-ou
+              ${mode === 'focus' ? 'bg-sky-200/15' : 'bg-sky-200/20'} 
+              ${mode === 'focus' ? 'text-sky-500' : 'text-white'}
+              ${mode === 'focus' ? 'hover:bg-sky-200/20' : 'hover:bg-sky-200/25'}
+            `}
             title={isRunning ? 'Pausar Temporizador' : 'Iniciar Temporizador'}
           >
             {isRunning ? (
@@ -169,8 +196,13 @@ export function Timer() {
 
           <Button
             onClick={resetTimer}
-            variant={`${mode === 'focus' ? 'default' : 'secondary'}`}
-            className={`w-15 h-15 rounded-full transition-all duration-300 ease-in-out`}
+            variant={`${mode === 'focus' ? 'default' : 'default'}`}
+            className={`
+              w-15 h-15 rounded-full transition-all duration-300 ease-in-out 
+              ${mode === 'focus' ? 'bg-sky-200/15' : 'bg-sky-200/20'} 
+              ${mode === 'focus' ? 'text-sky-500' : 'text-white'}
+              ${mode === 'focus' ? 'hover:bg-sky-200/20' : 'hover:bg-sky-200/25'}
+            `}
             title="Reiniciar Temporizador"
           >
             <RotateCcw className="size-7" />
