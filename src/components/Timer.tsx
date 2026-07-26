@@ -113,7 +113,7 @@ export function Timer() {
 
   return (
     <div
-      className={`relative flex flex-col w-screen h-screen items-center justify-center gap-8 transition-all duration-300 p-8 bg-zinc-950 text-white`}
+      className={`relative flex flex-col w-screen h-screen items-center justify-center gap-8 transition-all duration-300 p-8 bg-radial from-zinc-900 to-zinc-950 text-white`}
     >
       <div
         className={`absolute inset-0 transition-opacity duration-300 ${
