@@ -1,15 +1,10 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
-  <title id="title">Mentoria app icon</title>
-  <desc id="desc">A purple rounded-square icon with a white timer symbol.</desc>
-  <defs>
-    <linearGradient id="bg" x1="64" y1="32" x2="448" y2="480" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="#8b5cf6" />
-      <stop offset="1" stop-color="#312e81" />
-    </linearGradient>
-  </defs>
-  <rect width="512" height="512" rx="112" fill="url(#bg)" />
-  <circle cx="256" cy="270" r="118" fill="none" stroke="#ffffff" stroke-width="28" />
-  <path d="M256 188v88l62 36" fill="none" stroke="#ffffff" stroke-width="32" stroke-linecap="round" stroke-linejoin="round" />
-  <rect x="224" y="84" width="64" height="28" rx="14" fill="#ffffff" />
-  <path d="M256 84v42" stroke="#ffffff" stroke-width="28" stroke-linecap="round" />
+<svg width="93" height="93" viewBox="0 0 93 93" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect width="93" height="93" rx="20" fill="url(#paint0_radial_3025_32)"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M35.5125 36.6249C37.2661 38.0604 44.2414 45.8503 45.1499 46.5986C47.1661 48.2588 47.7177 46.743 56.3867 37.7219C62.6491 31.2052 72.2207 34.2679 74.4278 39.1163C74.9581 40.2811 75.1056 40.6054 74.9289 54.571C74.8915 57.5152 70.6812 59.3513 67.7916 58.1692C63.4028 56.3738 65.4518 52.5214 64.9634 44.5863C64.9559 44.4649 64.8812 43.2495 63.5636 43.5339C62.8627 43.6852 62.8421 43.743 57.9554 49.1324C57.1969 49.9687 57.1824 49.94 56.4073 50.7714C54.4083 52.9161 50.4119 59.2507 42.3033 55.9098C38.737 54.4404 31.1989 43.6286 29.2247 43.4721C27.4768 43.3338 28.2971 44.2693 28.0164 54.779C27.8982 59.2016 19.8659 59.8552 18.2897 55.5959C17.7969 54.2645 18.0761 43.0375 18.1031 41.9456C18.297 34.1477 29.1482 31.6673 35.5125 36.6249Z" fill="white" fill-opacity="0.75"/>
+<defs>
+<radialGradient id="paint0_radial_3025_32" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(46.5 46.5) rotate(90) scale(46.5)">
+<stop stop-color="#171717"/>
+<stop offset="1" stop-color="#0A0A0A"/>
+</radialGradient>
+</defs>
 </svg>
