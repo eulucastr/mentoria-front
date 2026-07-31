@@ -1,8 +1,8 @@
 import type { CSSProperties } from 'react';
 import { useEffect, useRef, useState } from 'react';
 import { Play, Pause, RotateCcw } from 'lucide-react';
-import { formatTime } from '../utils/formatTime';
-import { Button } from './shadcn/button';
+import { formatTime } from '../../utils/formatTime';
+import { Button } from '../../components/ui/button';
 import { useTimer } from 'react-timer-hook';
 import { getExpiryTimestamp } from '@/utils/getExpiryTimestamp';
 
@@ -124,7 +124,7 @@ export function Timer() {
 
   return (
     <div
-      className={`relative flex flex-col w-screen h-screen items-center justify-center gap-8 transition-all duration-300 p-8 bg-radial from-zinc-900 to-zinc-950 text-white`}
+      className={`relative flex flex-col w-full h-full items-center justify-center gap-8 transition-all duration-300 p-8 bg-radial from-zinc-900 to-zinc-950 text-white`}
     >
       <div
         className={`absolute inset-0 transition-opacity duration-300 ${
@@ -161,13 +161,10 @@ export function Timer() {
                     ${isActiveCycle && focusHasStarted ? 'w-8' : 'w-3'}
                     ${mode === 'focus' ? 'bg-sky-200/20' : 'bg-sky-200/30'}
                     ${index + 1 < cycleCount ? `${mode === 'focus' ? 'bg-sky-500' : 'bg-white'}` : ''}
-                    
-                    
-                    ${mode === 'focus' ? '' : ''}
                     ${isActiveCycle ? `
                       before:transition-[width] relative overflow-hidden before:absolute before:inset-y-0 before:left-0 before:content-[''] before:w-(--cycle-progress) before:duration-200 before:ease-linear before:rounded-full
-                      ${mode === 'focus' ? 'before:bg-sky-500' : 'before:bg-white'} 
-                      ` : ''}`}
+                      ${mode === 'focus' ? 'before:bg-sky-500' : 'before:bg-white'}` 
+                      : ''}`}
                 />
               );
             })()

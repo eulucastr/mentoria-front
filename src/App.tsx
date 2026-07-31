@@ -1,11 +1,13 @@
-import { Timer } from '@/components/Timer';
+import { RouterProvider } from 'react-router-dom';
+import { router } from './routes';
+import { TooltipProvider } from "@/components/ui/tooltip";
 
 function App() {
   return (
-    <>
-      <Timer />
-    </>
+    <TooltipProvider>
+      <RouterProvider router={router} />
+    </TooltipProvider>
   );
 }
 
-export { App };
+export { App }
