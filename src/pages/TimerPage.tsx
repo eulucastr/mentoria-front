@@ -1,4 +1,4 @@
-import { Timer } from '../app/timer/page';
+import { Timer } from '../app/timer/timer';
 
 export function TimerPage() {
   return (

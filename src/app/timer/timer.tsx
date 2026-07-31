@@ -124,12 +124,12 @@ export function Timer() {
 
   return (
     <div
-      className={`relative flex flex-col w-full h-full items-center justify-center gap-8 transition-all duration-300 p-8 bg-radial from-zinc-900 to-zinc-950 text-white`}
+      className={`relative flex h-full w-full flex-col items-center justify-center gap-8 p-8 transition-all duration-300 bg-radial dark:from-zinc-900 dark:to-zinc-950 from-zinc-50 to-zinc-100 text-foreground`}
     >
       <div
         className={`absolute inset-0 transition-opacity duration-300 ${
           mode === 'focus' ? 'opacity-0' : 'opacity-100'
-        } bg-radial from-sky-800 to-sky-950`}
+        } bg-radial from-sky-700/20 to-primary/10 dark:from-sky-500/20 dark:to-primary/10`}
       />
       <div className="relative z-10 flex flex-col items-center gap-8">
         <div className="text-2xl font-normal tracking-wide drop-shadow-md">
@@ -138,7 +138,7 @@ export function Timer() {
 
         {/* Display do Tempo */}
         <div className="text-7xl font-normal tracking-wide">
-		    {formatTime(totalSeconds)}
+          {formatTime(totalSeconds)}
         </div>
 
         {/* Indicador de Ciclos */}

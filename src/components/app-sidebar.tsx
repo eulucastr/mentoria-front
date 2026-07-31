@@ -95,7 +95,7 @@ const data = {
       ],
     },
     {
-      title: "Documentation",
+      title: "Meus Concursos",
       url: "#",
       icon: (
         <BookOpenIcon
@@ -103,19 +103,19 @@ const data = {
       ),
       items: [
         {
-          title: "Introduction",
+          title: "DATAPREV",
           url: "#",
         },
         {
-          title: "Get Started",
+          title: "IBGE",
           url: "#",
         },
         {
-          title: "Tutorials",
+          title: "Banco do Brasil",
           url: "#",
         },
         {
-          title: "Changelog",
+          title: "Bacen",
           url: "#",
         },
       ],
