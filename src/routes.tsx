@@ -10,7 +10,7 @@ export const router = createBrowserRouter([
     children: [
       {
         path: '/',
-        element: <DashboardPage />,
+        element: <TimerPage />,
       },
       {
         path: '/timer',
