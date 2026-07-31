@@ -1,5 +1,5 @@
 import { createBrowserRouter } from 'react-router-dom';
-import { AppLayout } from './layouts/AppLayout';
+import { AppLayout } from './layouts/app-layout';
 import { DashboardPage } from './pages/DashboardPage';
 import { TimerPage } from './pages/TimerPage';
 
