@@ -179,7 +179,7 @@ export function Timer() {
             className={`
               w-15 h-15 rounded-full transition-all duration-300 ease-in-ou
               ${mode === 'focus' ? 'bg-sky-200/15' : 'bg-sky-200/20'} 
-              ${mode === 'focus' ? 'text-sky-500' : 'text-white'}
+              ${mode === 'focus' ? 'text-foreground' : 'text-white'}
               ${mode === 'focus' ? 'hover:bg-sky-200/20' : 'hover:bg-sky-200/25'}
             `}
             title={isRunning ? 'Pausar Temporizador' : 'Iniciar Temporizador'}
@@ -197,7 +197,7 @@ export function Timer() {
             className={`
               w-15 h-15 rounded-full transition-all duration-300 ease-in-out 
               ${mode === 'focus' ? 'bg-sky-200/15' : 'bg-sky-200/20'} 
-              ${mode === 'focus' ? 'text-sky-500' : 'text-white'}
+              ${mode === 'focus' ? 'text-foreground' : 'text-white'}
               ${mode === 'focus' ? 'hover:bg-sky-200/20' : 'hover:bg-sky-200/25'}
             `}
             title="Reiniciar Temporizador"
