@@ -1,21 +1,25 @@
 import { Outlet } from 'react-router-dom';
 import { AppSidebar } from '@/components/app-sidebar';
-import { ThemeToggle } from '@/components/theme-toggle';
-import { SidebarInset, SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
+import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar';
+import { SiteHeader } from '@/components/site-header';
 
 export function AppLayout() {
   return (
-    <div className="flex h-screen w-screen overflow-hidden bg-background text-foreground">
-      <SidebarProvider className="bg-background text-foreground">
-        <AppSidebar />
+    <div className="flex h-full w-full overflow-hidden bg-background text-foreground">
+      <SidebarProvider
+        style={
+          {
+            "--sidebar-width": "calc(var(--spacing) * 72)",
+            "--header-height": "calc(var(--spacing) * 12)",
+          } as React.CSSProperties
+        }
+      >
+        <AppSidebar variant="inset" />
         <SidebarInset>
-          <div className="flex items-center justify-between bg-sidebar border-b border-border px-4 py-2">
-            <SidebarTrigger />
-            <ThemeToggle />
-          </div>
+          <SiteHeader />
           <Outlet />
         </SidebarInset>
-      </SidebarProvider>
+    </SidebarProvider>
     </div>
   );
 }
