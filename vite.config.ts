@@ -19,7 +19,7 @@ export default defineConfig({
         description: 'A simple timer app that works offline and installs like a native app.',
         theme_color: '#0f172a',
         background_color: '#0f172a',
-        display: 'standalone',
+        display: 'fullscreen',
         start_url: '/',
         scope: '/',
         icons: [
