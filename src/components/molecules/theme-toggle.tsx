@@ -5,7 +5,7 @@ import { Button } from '@/components/atoms/button';
 type Theme = 'light' | 'dark';
 
 function getInitialTheme(): Theme {
-  if (typeof window === 'undefined') return 'light';
+  if (typeof window === 'undefined') return 'dark';
 
   const storedTheme = window.localStorage.getItem('theme');
   if (storedTheme === 'light' || storedTheme === 'dark') {

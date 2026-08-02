@@ -3,7 +3,7 @@ import { AppLayout } from '@/layouts/app-layout';
 import { TimerPage } from '@/pages/timer';
 import { DashboardPage } from '@/pages/dashboard';
 import { ProtectedRoute } from './protected';
-import { LoginPage } from '@/pages/login';
+import { LoginPage } from '@/pages/login-new';
 
 export const router = createBrowserRouter([
   {
