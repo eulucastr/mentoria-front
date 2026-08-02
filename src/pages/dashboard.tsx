@@ -3,7 +3,7 @@ import { DataTable } from "@/components/molecules/data-table";
 import { SectionCards } from "@/components/molecules/section-cards";
 import data from "./dashboard.data.json"
 
-export function Dashboard() {
+export function DashboardPage() {
 
   return (
     <div className="p-8 text-white">

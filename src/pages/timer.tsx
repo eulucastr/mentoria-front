@@ -17,7 +17,7 @@ const TIMER_SETTINGS = {
 
 type Mode = 'focus' | 'shortBreak' | 'longBreak';
 
-export function Timer() {
+export function TimerPage() {
   const [mode, setMode] = useState<Mode>('focus');
   const [cycleCount, setCycleCount] = useState<number>(1);
   const [focusHasStarted, setFocusHasStarted] = useState<boolean>(false);
