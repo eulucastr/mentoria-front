@@ -1,5 +1,5 @@
-import { Separator } from "@/components/ui/separator"
-import { SidebarTrigger } from "@/components/ui/sidebar"
+import { Separator } from "@/components/atoms/separator"
+import { SidebarTrigger } from "@/components/atoms/sidebar"
 import { ThemeToggle } from "./theme-toggle"
 
 export function SiteHeader() {

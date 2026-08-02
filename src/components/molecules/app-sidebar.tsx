@@ -1,8 +1,8 @@
 import * as React from "react"
 
-import { NavMain } from "@/components/nav-main"
-import { NavSecondary } from "@/components/nav-secondary"
-import { NavUser } from "@/components/nav-user"
+import { NavMain } from "@/components/molecules/nav-main"
+import { NavSecondary } from "@/components/molecules/nav-secondary"
+import { NavUser } from "@/components/molecules/nav-user"
 import {
   Sidebar,
   SidebarContent,
@@ -11,7 +11,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-} from "@/components/ui/sidebar"
+} from "@/components/atoms/sidebar"
 import { LayoutDashboardIcon, ChartBarIcon, Settings2Icon, CircleHelpIcon, SearchIcon, CalendarIcon, LibraryBigIcon, } from "lucide-react"
 import Logo from '@/assets/logo.svg?react'
 

@@ -1,7 +1,7 @@
 import { Outlet } from 'react-router-dom';
-import { AppSidebar } from '@/components/app-sidebar';
-import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar';
-import { SiteHeader } from '@/components/site-header';
+import { AppSidebar } from '@/components/molecules/app-sidebar';
+import { SidebarInset, SidebarProvider } from '@/components/atoms/sidebar';
+import { SiteHeader } from '@/components/molecules/site-header';
 
 export function AppLayout() {
   return (
